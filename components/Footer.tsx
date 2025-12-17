@@ -82,7 +82,7 @@ export function Footer() {
         <div>
           <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-stone-900">Platform</h4>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-stone-900 hover:underline">About</a></li>
+            <li><a href="/about" className="hover:text-stone-900 hover:underline">About</a></li>
             <li><a href="#" className="hover:text-stone-900 hover:underline">Donate</a></li>
             <li><a href="#" className="hover:text-stone-900 hover:underline">Newsletter</a></li>
           </ul>

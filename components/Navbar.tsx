@@ -65,8 +65,8 @@ export function Navbar() {
 
         {/* RIGHT: Utilities */}
         <div className="hidden items-center justify-end gap-6 md:flex">
-          <Link href="#" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-            DONATE
+          <Link href="/about" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
+            ABOUT
           </Link>
           <span className="text-stone-300">/</span>
           <Link href="#" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
@@ -75,12 +75,18 @@ export function Navbar() {
           <span className="text-stone-300">/</span>
           {!loading && (
             user ? (
-              <button
-                onClick={handleSignOut}
-                className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900"
-              >
-                SIGN OUT
-              </button>
+              <>
+                <Link href="/profile" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
+                  PROFILE
+                </Link>
+                <span className="text-stone-300">/</span>
+                <button
+                  onClick={handleSignOut}
+                  className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900"
+                >
+                  SIGN OUT
+                </button>
+              </>
             ) : (
               <Link href="/login" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
                 LOGIN
