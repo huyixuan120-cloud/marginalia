@@ -1,8 +1,40 @@
 "use client";
-import { Search, Menu, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+
+import { useEffect, useState } from "react";
+import { Search, Menu, Facebook, Instagram, Twitter } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
 
 export function Navbar() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial user
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+
+    getUser();
+
+    // Listen to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-stone-200/50 bg-paper/95 backdrop-blur-sm">
       <div className="mx-auto grid h-20 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 md:px-12">
@@ -17,7 +49,7 @@ export function Navbar() {
           <div className="hidden h-4 w-px bg-stone-300 md:block" />
 
           <div className="hidden gap-4 md:flex">
-             {/* Social Icons (Hover effect needed) */}
+             {/* Social Icons */}
              <Facebook className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
              <Instagram className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
              <Twitter className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
@@ -41,9 +73,20 @@ export function Navbar() {
             NEWSLETTER
           </Link>
           <span className="text-stone-300">/</span>
-          <Link href="#" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-            SIGN IN
-          </Link>
+          {!loading && (
+            user ? (
+              <button
+                onClick={handleSignOut}
+                className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900"
+              >
+                SIGN OUT
+              </button>
+            ) : (
+              <Link href="/login" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
+                LOGIN
+              </Link>
+            )
+          )}
         </div>
 
         {/* Mobile Menu Trigger (Right side on mobile) */}
