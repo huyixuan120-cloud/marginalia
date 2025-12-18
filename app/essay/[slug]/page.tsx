@@ -1,6 +1,8 @@
 import { getEssayBySlug } from "@/lib/essays";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { CommentSection } from "@/components/CommentSection";
+import { ReadingProgress } from "@/components/ReadingProgress";
 
 // Custom components for MDX
 const DropCap = ({ children }: { children: React.ReactNode }) => (
@@ -35,6 +37,9 @@ export default async function EssayPage({ params }: { params: Promise<{ slug: st
 
   return (
     <article className="min-h-screen bg-paper pb-32 pt-32">
+      {/* Reading Progress Bar */}
+      <ReadingProgress />
+
       {/* Header */}
       <header className="mx-auto max-w-3xl px-6 text-center">
         <div className="mb-6 font-sans text-xs font-bold tracking-[0.2em] text-yellow-500 uppercase">
@@ -71,6 +76,9 @@ export default async function EssayPage({ params }: { params: Promise<{ slug: st
           </p>
         </div>
       </footer>
+
+      {/* Comment Section */}
+      <CommentSection slug={slug} />
     </article>
   );
 }
