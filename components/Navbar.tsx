@@ -62,31 +62,31 @@ export function Navbar() {
     <>
       {/* ========== STICKY HEADER BAR ========== */}
       <header className="sticky top-0 z-50 w-full border-b border-stone-200/50 bg-paper/95 backdrop-blur-sm">
-        {/* Desktop Layout: FULL WIDTH - No max-width constraint */}
-        <nav className="hidden w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-6 py-6 md:grid lg:px-8 xl:px-12">
+        {/* Unified Layout: Mobile uses flex, Desktop uses grid */}
+        <nav className="flex w-full items-center justify-between px-6 py-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-8 lg:py-6 xl:px-12">
 
           {/* LEFT ZONE: PUSHED TO FAR LEFT EDGE */}
-          <div className="flex w-full items-center justify-start gap-8">
+          <div className="flex items-center justify-start gap-4 lg:gap-8">
             {/* Menu Button - Opens Overlay */}
             <button
               onClick={() => setIsMenuOpen(true)}
               className="group"
             >
-              <span className="font-sans text-[13px] font-bold uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900">
+              <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-stone-700 transition-colors hover:text-stone-900 lg:text-[13px] lg:tracking-[0.25em]">
                 Menu
               </span>
             </button>
 
-            {/* Search Icon */}
-            <button className="transition-colors" aria-label="Search">
+            {/* Search Icon - Hidden on mobile */}
+            <button className="hidden transition-colors lg:block" aria-label="Search">
               <Search className="h-5 w-5 text-stone-600 hover:text-stone-900" />
             </button>
 
-            {/* Divider */}
-            <div className="h-5 w-px bg-stone-300" />
+            {/* Divider - Hidden on mobile */}
+            <div className="hidden h-5 w-px bg-stone-300 lg:block" />
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-5">
+            {/* Social Icons - Hidden on mobile */}
+            <div className="hidden items-center gap-5 lg:flex">
               <button className="transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5 text-stone-600 hover:text-stone-900" />
               </button>
@@ -99,18 +99,18 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* CENTER ZONE: LOGO (Perfectly Centered) */}
-          <div className="flex items-center justify-center px-12">
+          {/* CENTER ZONE: LOGO (Responsive sizing) */}
+          <div className="flex items-center justify-center lg:px-12">
             <Link
               href="/"
-              className="whitespace-nowrap font-serif text-5xl font-bold tracking-tight text-stone-900 transition-opacity hover:opacity-70 xl:text-6xl"
+              className="whitespace-nowrap font-serif text-3xl font-bold tracking-tight text-stone-900 transition-opacity hover:opacity-70 lg:text-5xl xl:text-6xl"
             >
               Marginalia
             </Link>
           </div>
 
-          {/* RIGHT ZONE: PUSHED TO FAR RIGHT EDGE */}
-          <div className="flex w-full items-center justify-end gap-10">
+          {/* RIGHT ZONE: HIDDEN ON MOBILE, VISIBLE ON DESKTOP */}
+          <div className="hidden w-full items-center justify-end gap-10 lg:flex">
             <Link
               href="/about"
               className="font-sans text-[13px] font-medium uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900"
@@ -144,29 +144,9 @@ export function Navbar() {
               )
             )}
           </div>
-        </nav>
 
-        {/* Mobile Layout: Simple Centered Logo */}
-        <nav className="mx-auto flex w-full items-center justify-between px-6 py-5 md:hidden">
-          {/* Mobile Menu Icon */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="p-2"
-            aria-label="Open menu"
-          >
-            <Menu className="h-6 w-6 text-stone-900" />
-          </button>
-
-          {/* Mobile Logo */}
-          <Link
-            href="/"
-            className="font-serif text-3xl font-bold tracking-tight text-stone-900"
-          >
-            Marginalia
-          </Link>
-
-          {/* Mobile Spacer */}
-          <div className="w-10" />
+          {/* Mobile Spacer (to balance layout) */}
+          <div className="w-16 lg:hidden" />
         </nav>
       </header>
 
@@ -213,12 +193,12 @@ export function Navbar() {
           </div>
 
           {/* 2-Column Grid Layout */}
-          <div className="grid h-[calc(100vh-88px)] grid-cols-1 lg:grid-cols-2 bg-white">
+          <div className="grid min-h-[calc(100vh-88px)] grid-cols-1 lg:grid-cols-2 bg-white">
 
             {/* LEFT COLUMN: CATEGORIES */}
-            <div className="flex flex-col justify-center border-r border-stone-200 px-8 py-12 lg:px-16 bg-white">
-              <nav className="space-y-6">
-                <h2 className="mb-8 font-sans text-sm font-bold uppercase tracking-[0.2em] text-stone-500">
+            <div className="flex flex-col justify-center border-b px-6 py-8 lg:border-r lg:border-b-0 lg:px-16 lg:py-12 bg-white">
+              <nav className="space-y-4 lg:space-y-6">
+                <h2 className="mb-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-stone-500 lg:mb-8 lg:text-sm">
                   Esplora per Categoria
                 </h2>
 
@@ -227,7 +207,7 @@ export function Navbar() {
                     key={category.slug}
                     href={`/category/${category.slug}`}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block font-serif text-4xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-5xl"
+                    className="block font-serif text-3xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-4xl xl:text-5xl"
                   >
                     {category.name}
                   </Link>
@@ -236,7 +216,7 @@ export function Navbar() {
             </div>
 
             {/* RIGHT COLUMN: POPULAR & UTILITIES */}
-            <div className="flex flex-col justify-start gap-20 px-8 py-12 lg:px-16 bg-white">
+            <div className="flex flex-col justify-start gap-12 px-6 py-8 lg:gap-20 lg:px-16 lg:py-12 bg-white">
 
               {/* Popular Essays */}
               <div>

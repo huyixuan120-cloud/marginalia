@@ -7,14 +7,14 @@ interface FeaturedGridProps {
 
 export function FeaturedGrid({ essays }: FeaturedGridProps) {
   return (
-    <section className="container mx-auto px-6 py-24">
+    <section className="container mx-auto px-6 py-12 lg:py-24">
       {/* Section Header */}
-      <div className="mb-12 border-b border-stone-200 pb-4">
-        <h2 className="font-serif text-3xl italic text-stone-900">Latest Essays</h2>
+      <div className="mb-8 border-b border-stone-200 pb-4 lg:mb-12">
+        <h2 className="font-serif text-2xl italic text-stone-900 lg:text-3xl">Latest Essays</h2>
       </div>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-12">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-12 lg:gap-y-16">
         {essays.map((essay, index) => {
           // Determine column span based on position
           const isLead = index === 0;
