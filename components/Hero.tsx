@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { getAllEssays } from "@/lib/essays";
+import type { Essay } from "@/lib/essays";
 
-export function Hero() {
-  const heroEssay = getAllEssays()[0];
+interface HeroProps {
+  essay: Essay;
+}
+
+export function Hero({ essay: heroEssay }: HeroProps) {
 
   return (
     <section className="relative h-[85vh] w-full overflow-hidden">

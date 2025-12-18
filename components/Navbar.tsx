@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Menu, Facebook, Instagram, Twitter } from "lucide-react";
+import { Search, Menu, Facebook, Instagram, Twitter, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -11,6 +11,7 @@ export function Navbar() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Get initial user
@@ -37,70 +38,279 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-stone-200/50 bg-paper/95 backdrop-blur-sm">
-      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 md:px-12">
+      {/* Desktop Layout: FULL WIDTH - No max-width constraint */}
+      <nav className="hidden w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-6 py-6 md:grid lg:px-8 xl:px-12">
 
-        {/* LEFT: Nav & Socials */}
-        <div className="flex items-center gap-6">
-          <button className="group flex items-center gap-2">
-            <span className="font-sans text-xs font-bold tracking-[0.2em] text-stone-900">MENU</span>
-            <Search className="h-4 w-4 text-stone-400 group-hover:text-stone-900" />
+        {/* LEFT ZONE: PUSHED TO FAR LEFT EDGE */}
+        <div className="flex w-full items-center justify-start gap-5">
+          {/* Menu Button - Opens Overlay */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="group"
+          >
+            <span className="font-sans text-sm font-bold uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900">
+              Menu
+            </span>
           </button>
 
-          <div className="hidden h-4 w-px bg-stone-300 md:block" />
+          {/* Search Icon */}
+          <button className="transition-colors" aria-label="Search">
+            <Search className="h-5 w-5 text-stone-600 hover:text-stone-900" />
+          </button>
 
-          <div className="hidden gap-4 md:flex">
-             {/* Social Icons */}
-             <Facebook className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
-             <Instagram className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
-             <Twitter className="h-4 w-4 text-stone-400 hover:text-stone-900 cursor-pointer" />
+          {/* Divider */}
+          <div className="h-5 w-px bg-stone-300" />
+
+          {/* Social Icons */}
+          <div className="flex items-center gap-4">
+            <button className="transition-colors" aria-label="Facebook">
+              <Facebook className="h-5 w-5 text-stone-600 hover:text-stone-900" />
+            </button>
+            <button className="transition-colors" aria-label="Instagram">
+              <Instagram className="h-5 w-5 text-stone-600 hover:text-stone-900" />
+            </button>
+            <button className="transition-colors" aria-label="Twitter">
+              <Twitter className="h-5 w-5 text-stone-600 hover:text-stone-900" />
+            </button>
           </div>
         </div>
 
-        {/* CENTER: Logo */}
-        <div className="text-center">
-          <Link href="/" className="font-serif text-4xl font-bold tracking-tighter text-stone-900">
+        {/* CENTER ZONE: LOGO (Perfectly Centered) */}
+        <div className="flex items-center justify-center px-12">
+          <Link
+            href="/"
+            className="whitespace-nowrap font-serif text-5xl font-bold tracking-tight text-stone-900 transition-opacity hover:opacity-70 xl:text-6xl"
+          >
             Marginalia
           </Link>
         </div>
 
-        {/* RIGHT: Utilities */}
-        <div className="hidden items-center justify-end gap-6 md:flex">
-          <Link href="/about" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-            ABOUT
+        {/* RIGHT ZONE: PUSHED TO FAR RIGHT EDGE */}
+        <div className="flex w-full items-center justify-end gap-8">
+          <Link
+            href="/about"
+            className="font-sans text-sm font-medium uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900"
+          >
+            About
           </Link>
-          <span className="text-stone-300">/</span>
-          <Link href="#" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-            NEWSLETTER
-          </Link>
-          <span className="text-stone-300">/</span>
+
           {!loading && (
             user ? (
               <>
-                <Link href="/profile" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-                  PROFILE
+                <Link
+                  href="/profile"
+                  className="font-sans text-sm font-medium uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900"
+                >
+                  Profile
                 </Link>
-                <span className="text-stone-300">/</span>
                 <button
                   onClick={handleSignOut}
-                  className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900"
+                  className="font-sans text-sm font-medium uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900"
                 >
-                  SIGN OUT
+                  Sign Out
                 </button>
               </>
             ) : (
-              <Link href="/login" className="font-sans text-xs font-bold tracking-[0.2em] text-stone-500 hover:text-stone-900">
-                LOGIN
+              <Link
+                href="/login"
+                className="font-sans text-sm font-medium uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900"
+              >
+                Login
               </Link>
             )
           )}
         </div>
+      </nav>
 
-        {/* Mobile Menu Trigger (Right side on mobile) */}
-        <div className="flex justify-end md:hidden">
-             <Menu className="h-6 w-6 text-stone-900" />
+      {/* Mobile Layout: Simple Centered Logo */}
+      <nav className="mx-auto flex w-full items-center justify-between px-6 py-5 md:hidden">
+        {/* Mobile Menu Icon */}
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className="p-2"
+          aria-label="Open menu"
+        >
+          <Menu className="h-6 w-6 text-stone-900" />
+        </button>
+
+        {/* Mobile Logo */}
+        <Link
+          href="/"
+          className="font-serif text-3xl font-bold tracking-tight text-stone-900"
+        >
+          Marginalia
+        </Link>
+
+        {/* Mobile Spacer */}
+        <div className="w-10" />
+      </nav>
+
+      {/* MEGA MENU OVERLAY */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-paper">
+          {/* Close Button & Header */}
+          <div className="flex items-center justify-between border-b border-stone-200 px-6 py-6 lg:px-12">
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="group flex items-center gap-2"
+            >
+              <X className="h-6 w-6 text-stone-900" />
+              <span className="font-sans text-sm font-bold uppercase tracking-[0.25em] text-stone-700 transition-colors hover:text-stone-900">
+                Close
+              </span>
+            </button>
+
+            {/* Logo in Menu */}
+            <Link
+              href="/"
+              onClick={() => setIsMenuOpen(false)}
+              className="font-serif text-3xl font-bold tracking-tight text-stone-900"
+            >
+              Marginalia
+            </Link>
+
+            <div className="w-24" />
+          </div>
+
+          {/* 2-Column Grid Layout */}
+          <div className="grid h-[calc(100vh-88px)] grid-cols-1 lg:grid-cols-2">
+
+            {/* LEFT COLUMN: CATEGORIES */}
+            <div className="flex flex-col justify-center border-r border-stone-200 px-8 py-12 lg:px-16">
+              <nav className="space-y-6">
+                <h2 className="mb-8 font-sans text-xs font-bold uppercase tracking-[0.3em] text-stone-500">
+                  Esplora per Categoria
+                </h2>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Economia
+                </Link>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Storia
+                </Link>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Società
+                </Link>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Geopolitica
+                </Link>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Filosofia
+                </Link>
+
+                <Link
+                  href="#"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block font-serif text-5xl font-bold leading-tight tracking-tight text-stone-900 transition-colors hover:text-stone-600 lg:text-6xl"
+                >
+                  Tecnologia
+                </Link>
+              </nav>
+            </div>
+
+            {/* RIGHT COLUMN: POPULAR & UTILITIES */}
+            <div className="flex flex-col justify-between px-8 py-12 lg:px-16">
+
+              {/* Popular Essays */}
+              <div>
+                <h3 className="mb-6 font-sans text-xs font-bold uppercase tracking-[0.3em] text-stone-500">
+                  Articoli Popolari
+                </h3>
+                <div className="space-y-6">
+                  <Link
+                    href="/essay/elogio-della-lentezza"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block group"
+                  >
+                    <h4 className="font-serif text-2xl font-medium leading-tight text-stone-900 transition-colors group-hover:text-stone-600">
+                      Elogio della Lentezza
+                    </h4>
+                    <p className="mt-1 font-sans text-sm text-stone-500">
+                      Perché correre non serve a nulla se non sai dove andare
+                    </p>
+                  </Link>
+
+                  <Link
+                    href="/essay/digital-minimalism"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block group"
+                  >
+                    <h4 className="font-serif text-2xl font-medium leading-tight text-stone-900 transition-colors group-hover:text-stone-600">
+                      Digital Minimalism
+                    </h4>
+                    <p className="mt-1 font-sans text-sm text-stone-500">
+                      Reclaiming attention in the age of distraction
+                    </p>
+                  </Link>
+
+                  <Link
+                    href="/essay/the-art-of-waiting"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block group"
+                  >
+                    <h4 className="font-serif text-2xl font-medium leading-tight text-stone-900 transition-colors group-hover:text-stone-600">
+                      The Art of Waiting
+                    </h4>
+                    <p className="mt-1 font-sans text-sm text-stone-500">
+                      Finding meaning in the spaces between
+                    </p>
+                  </Link>
+                </div>
+
+                {/* About Link */}
+                <div className="mt-12 border-t border-stone-200 pt-8">
+                  <Link
+                    href="/about"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="inline-block font-serif text-3xl font-bold text-stone-900 transition-colors hover:text-stone-600"
+                  >
+                    About Marginalia →
+                  </Link>
+                </div>
+              </div>
+
+              {/* Search Bar */}
+              <div className="mt-12">
+                <h3 className="mb-4 font-sans text-xs font-bold uppercase tracking-[0.3em] text-stone-500">
+                  Cerca
+                </h3>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Cerca articoli..."
+                    className="w-full border-b-2 border-stone-300 bg-transparent py-4 pr-10 font-sans text-lg text-stone-900 placeholder-stone-400 focus:border-stone-900 focus:outline-none"
+                  />
+                  <Search className="absolute right-0 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-      </div>
+      )}
     </header>
   );
 }

@@ -14,6 +14,7 @@ export interface Essay {
   image: string;
   excerpt: string;
   content: string;
+  featured?: boolean;
 }
 
 /**
@@ -43,10 +44,11 @@ export function getAllEssays(): Essay[] {
         subtitle: data.subtitle,
         category: data.category,
         author: data.author,
-        date: data.date,
+        date: data.date || data.publishedAt || '',
         image: data.image,
         excerpt: data.excerpt,
         content,
+        featured: data.featured || false,
       };
     });
 
@@ -74,10 +76,11 @@ export function getEssayBySlug(slug: string): Essay | null {
       subtitle: data.subtitle,
       category: data.category,
       author: data.author,
-      date: data.date,
+      date: data.date || data.publishedAt || '',
       image: data.image,
       excerpt: data.excerpt,
       content,
+      featured: data.featured || false,
     };
   } catch (error) {
     console.error(`Error reading essay ${slug}:`, error);

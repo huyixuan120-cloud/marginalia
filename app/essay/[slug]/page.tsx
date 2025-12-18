@@ -3,6 +3,27 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { CommentSection } from "@/components/CommentSection";
 import { ReadingProgress } from "@/components/ReadingProgress";
+import Image from "next/image";
+
+// Safe date formatter
+function formatDate(dateString: string): string {
+  if (!dateString) return 'No date';
+
+  try {
+    const date = new Date(dateString);
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return dateString; // Return raw string if invalid
+    }
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  } catch (error) {
+    return dateString; // Fallback to raw string
+  }
+}
 
 // Custom components for MDX
 const DropCap = ({ children }: { children: React.ReactNode }) => (
@@ -40,6 +61,22 @@ export default async function EssayPage({ params }: { params: Promise<{ slug: st
       {/* Reading Progress Bar */}
       <ReadingProgress />
 
+      {/* Cover Image */}
+      {essay.image && (
+        <div className="mx-auto max-w-4xl px-6 mb-12">
+          <div className="relative h-[400px] w-full overflow-hidden rounded-xl">
+            <Image
+              src={essay.image}
+              alt={essay.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="mx-auto max-w-3xl px-6 text-center">
         <div className="mb-6 font-sans text-xs font-bold tracking-[0.2em] text-yellow-500 uppercase">
@@ -56,7 +93,7 @@ export default async function EssayPage({ params }: { params: Promise<{ slug: st
         <div className="mt-12 flex items-center justify-center gap-4 border-y border-stone-200 py-6 font-sans text-xs font-bold tracking-widest text-stone-500 uppercase">
           <span>By {essay.author}</span>
           <span className="text-stone-300">•</span>
-          <span>{new Date(essay.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+          <span>{formatDate(essay.date)}</span>
         </div>
       </header>
 

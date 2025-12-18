@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { getAllEssays } from "@/lib/essays";
+import type { Essay } from "@/lib/essays";
 
-export function FeaturedGrid() {
-  const essays = getAllEssays().slice(1);
+interface FeaturedGridProps {
+  essays: Essay[];
+}
+
+export function FeaturedGrid({ essays }: FeaturedGridProps) {
   return (
     <section className="container mx-auto px-6 py-24">
       {/* Section Header */}
