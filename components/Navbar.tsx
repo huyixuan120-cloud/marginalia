@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Menu, Facebook, Instagram, Twitter, X } from "lucide-react";
+import { Search, Menu, Facebook, Instagram, Twitter, X, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -109,7 +109,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* RIGHT ZONE: HIDDEN ON MOBILE, VISIBLE ON DESKTOP */}
+          {/* RIGHT ZONE - DESKTOP: TEXT LINKS */}
           <div className="hidden w-full items-center justify-end gap-10 lg:flex">
             <Link
               href="/about"
@@ -145,8 +145,16 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Mobile Spacer (to balance layout) */}
-          <div className="w-16 lg:hidden" />
+          {/* RIGHT ZONE - MOBILE: USER ICON */}
+          {!loading && (
+            <Link
+              href={user ? "/profile" : "/login"}
+              className="flex items-center justify-center lg:hidden"
+              aria-label={user ? "User profile" : "Login"}
+            >
+              <UserIcon className="h-6 w-6 text-stone-900" />
+            </Link>
+          )}
         </nav>
       </header>
 
