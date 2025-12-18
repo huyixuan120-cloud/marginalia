@@ -7,12 +7,13 @@ const essaysDirectory = path.join(process.cwd(), 'content/essays');
 export interface Essay {
   slug: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   category: string;
   author: string;
   date: string;
   image: string;
   excerpt: string;
+  readTime?: string;
   content: string;
   featured?: boolean;
 }
@@ -41,12 +42,13 @@ export function getAllEssays(): Essay[] {
       return {
         slug,
         title: data.title,
-        subtitle: data.subtitle,
+        subtitle: data.subtitle || '',
         category: data.category,
         author: data.author,
         date: data.date || data.publishedAt || '',
         image: data.image,
-        excerpt: data.excerpt,
+        excerpt: data.excerpt || '',
+        readTime: data.readTime || '',
         content,
         featured: data.featured || false,
       };
@@ -73,12 +75,13 @@ export function getEssayBySlug(slug: string): Essay | null {
     return {
       slug,
       title: data.title,
-      subtitle: data.subtitle,
+      subtitle: data.subtitle || '',
       category: data.category,
       author: data.author,
       date: data.date || data.publishedAt || '',
       image: data.image,
-      excerpt: data.excerpt,
+      excerpt: data.excerpt || '',
+      readTime: data.readTime || '',
       content,
       featured: data.featured || false,
     };
